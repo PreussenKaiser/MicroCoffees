@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+    microcoffees.db:
+        container_name: CoffeesDB
+        image: "mcr.microsoft.com/mssql/server:2022-latest"
+        ports:
+          - "1433:1433"
+        environment:
+            SA_PASSWORD: "SecurePassword1!"
+            ACCEPT_EULA: "Y"
+
+    microcoffees.api:
+        container_name: CoffeesAPI
+        image: ${DOCKER_REGISTRY-}microcoffeesapi
+        build:
+            context: .
+            dockerfile: MicroCoffees.Api/Dockerfile
+        depends_on:
+            - microcoffees.api
