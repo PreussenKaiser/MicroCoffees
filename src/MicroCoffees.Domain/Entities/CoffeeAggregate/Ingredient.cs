@@ -5,21 +5,28 @@
 /// </summary>
 public sealed class Ingredient : Entity
 {
-    /// <summary>
-    /// Initializes the <see cref="Ingredient"/> class.
-    /// </summary>
-    public Ingredient() : base()
-    {
-        this.Name = string.Empty;
-    }
+	/// <summary>
+	/// Initializes the <see cref="Ingredient"/> class.
+	/// </summary>
+	public Ingredient() : base()
+	{
+		this.Name ??= string.Empty;
+	}
 
-    /// <summary>
-    /// The ingredient's name.
-    /// </summary>
-    public string Name { get; set; }
+	public Ingredient(string name, decimal cost)
+		: this()
+	{
+		this.Name = name;
+		this.Cost = cost;
+	}
 
-    /// <summary>
-    /// How much the ingredient costs in USD.
-    /// </summary>
-    public decimal Cost { get; set; }
+	/// <summary>
+	/// The ingredient's name.
+	/// </summary>
+	public string Name { get; private set; }
+
+	/// <summary>
+	/// How much the ingredient costs in USD.
+	/// </summary>
+	public decimal Cost { get; private set; }
 }

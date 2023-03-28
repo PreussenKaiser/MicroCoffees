@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using MicroCoffees.Api.Infrastructure.Persistence;
 using MicroCoffees.Domain.Entities;
 
 namespace MicroCoffees.Api.Infrastructure.Extensions;

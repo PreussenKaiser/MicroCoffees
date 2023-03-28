@@ -8,7 +8,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["MicroCoffees.Api/MicroCoffees.Api.csproj", "MicroCoffees.Api/"]
-COPY ["MicroCoffees.Api/MicroCoffees.Domain.csproj", "MicroCoffees.Domain/"]
+COPY ["MicroCoffees.Domain/MicroCoffees.Domain.csproj", "MicroCoffees.Domain/"]
 RUN dotnet restore "MicroCoffees.Api/MicroCoffees.Api.csproj"
 COPY . .
 WORKDIR "/src/MicroCoffees.Api"

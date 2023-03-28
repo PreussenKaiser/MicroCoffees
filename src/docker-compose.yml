@@ -17,4 +17,4 @@ services:
             context: .
             dockerfile: MicroCoffees.Api/Dockerfile
         depends_on:
-            - microcoffees.api
+            - microcoffees.db

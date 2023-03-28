@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using MicroCoffees.Api.Application.Requests;
-using MicroCoffees.Api.Infrastructure.Persistence;
+using MicroCoffees.Api.Infrastructure;
 using MicroCoffees.Domain.Entities.CoffeeAggregate;
 using Microsoft.EntityFrameworkCore;
 

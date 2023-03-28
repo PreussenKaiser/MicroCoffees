@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using MicroCoffees.Api.Application.Requests;
-using MicroCoffees.Api.Infrastructure.Persistence;
+using MicroCoffees.Api.Infrastructure;
+using MicroCoffees.Domain.Entities.CoffeeAggregate;
 
 namespace MicroCoffees.Api.Application.Handlers;
 
@@ -15,12 +17,18 @@ public sealed class AddRequestHandler : IRequestHandler<AddRequest, IResult>
 	private readonly CoffeeContext context;
 
 	/// <summary>
+	/// Maps DTOs to entities.
+	/// </summary>
+	private readonly IMapper mapper;
+
+	/// <summary>
 	/// Initializes the <see cref="AddRequestHandler"/> class.
 	/// </summary>
 	/// <param name="context">The database to query.</param>
-	public AddRequestHandler(CoffeeContext context)
+	public AddRequestHandler(CoffeeContext context, IMapper mapper)
 	{
 		this.context = context;
+		this.mapper = mapper;
 	}
 
 	/// <summary>
@@ -33,10 +41,12 @@ public sealed class AddRequestHandler : IRequestHandler<AddRequest, IResult>
 	{
 		// TODO: Validation
 
-		await this.context.Coffees.AddAsync(request.Coffee);
+		Coffee coffee = this.mapper.Map<Coffee>(request.Coffee);
 
-		await this.context.SaveChangesAsync();
+		await this.context.Coffees.AddAsync(coffee, cancellationToken);
 
-		return Results.Created(string.Empty, request.Coffee);
+		await this.context.SaveChangesAsync(cancellationToken);
+
+		return Results.Created($"/coffees/{coffee.Id}", request.Coffee);
 	}
 }

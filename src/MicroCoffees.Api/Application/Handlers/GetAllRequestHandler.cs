@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
+using MicroCoffees.Api.Application.DTOs;
 using MicroCoffees.Api.Application.Requests;
-using MicroCoffees.Api.Infrastructure.Persistence;
+using MicroCoffees.Api.Infrastructure;
 using MicroCoffees.Domain.Entities.CoffeeAggregate;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,12 +19,19 @@ public sealed class GetAllRequestHandler : IRequestHandler<GetAllRequest, IResul
 	private readonly CoffeeContext context;
 
 	/// <summary>
+	/// Maps DTO's to entities.
+	/// </summary>
+	private readonly IMapper mapper;
+
+	/// <summary>
 	/// Initializes the <see cref="GetAllRequestHandler"/> class.
 	/// </summary>
 	/// <param name="context">The database to query.</param>
-	public GetAllRequestHandler(CoffeeContext context)
+	/// <param name="mapper">Maps DTOs to entities.</param>
+	public GetAllRequestHandler(CoffeeContext context, IMapper mapper)
 	{
-		this.context = context;	
+		this.context = context;
+		this.mapper = mapper;
 	}
 
 	/// <summary>
@@ -31,12 +40,13 @@ public sealed class GetAllRequestHandler : IRequestHandler<GetAllRequest, IResul
 	/// <param name="request"></param>
 	/// <param name="cancellationToken"></param>
 	/// <returns></returns>
-	/// <exception cref="NotImplementedException"></exception>
 	public async Task<IResult> Handle(GetAllRequest request, CancellationToken cancellationToken)
 	{
-		IEnumerable<Coffee> coffees = await this.context.Coffees
+		IEnumerable<CoffeeDto> coffees = await this.context.Coffees
 			.Skip(request.Page)
 			.Take(request.Count)
+			.Include(c => c.Ingredients)
+			.Select(c => this.mapper.Map<CoffeeDto>(c))
 			.ToListAsync(cancellationToken);
 
 		return Results.Ok(coffees);
