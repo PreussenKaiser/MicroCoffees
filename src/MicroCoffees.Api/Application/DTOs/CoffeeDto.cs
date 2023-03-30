@@ -10,11 +10,11 @@ namespace MicroCoffees.Api.Application.DTOs;
 /// <param name="ImageUrl">A url leading to an image of the coffee.</param>
 /// <param name="Cost">The coffee's cost.</param>
 /// <param name="Quantity">The coffee's quantity.</param>
-/// <param name="Ingredients">The coffee's ingredients.</param>
+/// <param name="Roast">The coffee's roast.</param>
 public sealed record CoffeeDto(
 	Guid Id,
 	string Name,
 	string ImageUrl,
 	decimal Cost,
 	int Quantity,
-	IngredientDto[] Ingredients);
+	Roast Roast);

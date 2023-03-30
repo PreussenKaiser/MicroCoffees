@@ -1,4 +1,7 @@
-﻿namespace MicroCoffees.Api.Application.Requests;
+﻿using MediatR;
+using MicroCoffees.Api.Application.DTOs;
+
+namespace MicroCoffees.Api.Application.Requests;
 
 /// <summary>
 /// Represents a request to get a paginated list of coffees.
@@ -6,4 +9,4 @@
 /// <param name="Page">The page to start on.</param>
 /// <param name="Count">The amount of coffees to get.</param>
 public sealed record GetAllRequest(
-	int Page = 0, int Count = 8) : IHttpRequest;
+	int Page = 0, int Count = 8) : IRequest<IEnumerable<CoffeeDto>>;

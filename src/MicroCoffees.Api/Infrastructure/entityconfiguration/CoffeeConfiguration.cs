@@ -21,10 +21,6 @@ public sealed class CoffeeConfiguration : IEntityTypeConfiguration<Coffee>
 		builder.Property(c => c.ImageUrl).HasMaxLength(256);
 		builder.Property(c => c.Cost).HasPrecision(18, 2);
 
-		builder.Metadata
-			.FindNavigation(nameof(Coffee.Ingredients))
-			?.SetPropertyAccessMode(PropertyAccessMode.Field);
-
 		builder.Ignore(c => c.DomainEvents);
 	}
 }

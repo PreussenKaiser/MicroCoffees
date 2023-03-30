@@ -11,12 +11,12 @@ namespace MicroCoffees.Api.Application.Handlers;
 /// <summary>
 /// 
 /// </summary>
-public sealed class GetAllRequestHandler : IRequestHandler<GetAllRequest, IResult>
+public sealed class GetAllRequestHandler : IRequestHandler<GetAllRequest, IEnumerable<CoffeeDto>>
 {
 	/// <summary>
 	/// The database to query.
 	/// </summary>
-	private readonly CoffeeContext context;
+	private readonly ICoffeeRepository coffeeRepository;
 
 	/// <summary>
 	/// Maps DTO's to entities.
@@ -26,11 +26,11 @@ public sealed class GetAllRequestHandler : IRequestHandler<GetAllRequest, IResul
 	/// <summary>
 	/// Initializes the <see cref="GetAllRequestHandler"/> class.
 	/// </summary>
-	/// <param name="context">The database to query.</param>
+	/// <param name="coffeeRepository">The database to query.</param>
 	/// <param name="mapper">Maps DTOs to entities.</param>
-	public GetAllRequestHandler(CoffeeContext context, IMapper mapper)
+	public GetAllRequestHandler(ICoffeeRepository coffeeRepository, IMapper mapper)
 	{
-		this.context = context;
+		this.coffeeRepository = coffeeRepository;
 		this.mapper = mapper;
 	}
 
@@ -40,15 +40,12 @@ public sealed class GetAllRequestHandler : IRequestHandler<GetAllRequest, IResul
 	/// <param name="request"></param>
 	/// <param name="cancellationToken"></param>
 	/// <returns></returns>
-	public async Task<IResult> Handle(GetAllRequest request, CancellationToken cancellationToken)
+	public async Task<IEnumerable<CoffeeDto>> Handle(GetAllRequest request, CancellationToken cancellationToken)
 	{
-		IEnumerable<CoffeeDto> coffees = await this.context.Coffees
-			.Skip(request.Page)
-			.Take(request.Count)
-			.Include(c => c.Ingredients)
-			.Select(c => this.mapper.Map<CoffeeDto>(c))
-			.ToListAsync(cancellationToken);
+		IEnumerable<CoffeeDto> coffees = (await this.coffeeRepository
+			.GetAllAsync(request.Page, request.Count))
+			.Select(c => this.mapper.Map<CoffeeDto>(c));
 
-		return Results.Ok(coffees);
+		return coffees;
 	}
 }

@@ -34,11 +34,6 @@ public sealed class CoffeeContext : DbContext, IUnitOfWork
 	public DbSet<Coffee> Coffees { get; set; }
 
 	/// <summary>
-	/// Ingredients in the database.
-	/// </summary>
-	public DbSet<Ingredient> Ingredients { get; set; }
-
-	/// <summary>
 	/// Persists changes in the database and calls all domain events.
 	/// </summary>
 	/// <param name="cancellationToken"></param>

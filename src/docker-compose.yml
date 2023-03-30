@@ -16,5 +16,7 @@ services:
         build:
             context: .
             dockerfile: MicroCoffees.Api/Dockerfile
+        ports:
+            - "5000:80"
         depends_on:
             - microcoffees.db

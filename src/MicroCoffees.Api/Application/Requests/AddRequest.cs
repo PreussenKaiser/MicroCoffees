@@ -1,4 +1,5 @@
-﻿using MicroCoffees.Api.Application.DTOs;
+﻿using MediatR;
+using MicroCoffees.Api.Application.DTOs;
 
 namespace MicroCoffees.Api.Application.Requests;
 
@@ -6,4 +7,4 @@ namespace MicroCoffees.Api.Application.Requests;
 /// A request to add a coffee to the API.
 /// </summary>
 /// <param name="Coffee">The coffee to add.</param>
-public sealed record AddRequest(CoffeeDto Coffee) : IHttpRequest;
+public sealed record AddRequest(CoffeeDto Coffee) : IRequest<bool>;

@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using MicroCoffees.Domain.Events;
 
 namespace MicroCoffees.Domain.Entities.CoffeeAggregate;
 
@@ -8,16 +8,10 @@ namespace MicroCoffees.Domain.Entities.CoffeeAggregate;
 public sealed class Coffee : Entity
 {
 	/// <summary>
-	/// Ingredients in the <see cref="Coffee"/>.
-	/// </summary>
-	private readonly List<Ingredient> ingredients;
-
-	/// <summary>
 	/// Initializes the <see cref="Coffee"/> class.
 	/// </summary>
 	public Coffee() : base()
 	{
-		this.ingredients = new List<Ingredient>();
 		this.Name ??= string.Empty;
 		this.ImageUrl ??=  string.Empty;
 	}
@@ -34,13 +28,13 @@ public sealed class Coffee : Entity
 		string imageUrl,
 		decimal cost,
 		int quantity,
-		IEnumerable<Ingredient> ingredients) : this()
+		Roast roast) : this()
 	{
 		this.Name = name;
 		this.ImageUrl = imageUrl;
 		this.Cost = cost;
-		this.Quantity = quantity;
-		this.ingredients = ingredients.ToList();
+		this.Quantity = quantity > 0 ? quantity : 1;
+		this.Roast = roast;
 	}
 
 	/// <summary>
@@ -64,29 +58,9 @@ public sealed class Coffee : Entity
 	public int Quantity { get; private set; }
 
 	/// <summary>
-	/// Ingredients in the coffee.
+	/// The coffee's roast type.
 	/// </summary>
-	public IReadOnlyCollection<Ingredient> Ingredients
-		=> this.ingredients.AsReadOnly();
-
-	/// <summary>
-	/// Adds an ingredient to the <see cref="Coffee"/>.
-	/// </summary>
-	/// <param name="ingredient">The <see cref="Ingredient"/> to add.</param>
-	/// <returns>The current instance with an added ingredient.</returns>
-	/// <exception cref="ArgumentException"></exception>
-	public Coffee AddIngredient(Ingredient ingredient)
-	{
-		if (this.Cost < 0)
-		{
-			throw new ArgumentException("Price cannot be negative.");
-		}
-
-		this.Cost += ingredient.Cost;
-		this.ingredients.Add(ingredient);
-
-		return this;
-	}
+	public Roast Roast { get; private set; }
 
 	/// <summary>
 	/// Serves the <see cref="Coffee"/> to a customer.
@@ -103,7 +77,7 @@ public sealed class Coffee : Entity
 
 		if (this.Quantity == 0)
 		{
-			// Remove coffee.
+			base.AddEvent(new RemoveCoffeeEvent(this));
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using MicroCoffees.Domain.Entities.CoffeeAggregate;
+﻿using MediatR;
+using MicroCoffees.Domain.Entities.CoffeeAggregate;
 
 namespace MicroCoffees.Api.Application.Requests;
 
@@ -6,4 +7,4 @@ namespace MicroCoffees.Api.Application.Requests;
 /// Serves the referenced <see cref="Coffee"/>.
 /// </summary>
 /// <param name="Id"></param>
-public sealed record ServeRequest(Guid Id) : IHttpRequest;
+public sealed record ServeRequest(Guid Id) : IRequest<bool>;

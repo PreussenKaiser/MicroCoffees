@@ -9,9 +9,6 @@ public sealed class CoffeeProfile : Profile
 	public CoffeeProfile()
 	{
 		base.CreateMap<Coffee, CoffeeDto>();
-		base.CreateMap<Ingredient, IngredientDto>();
-
 		base.CreateMap<CoffeeDto, Coffee>();
-		base.CreateMap<IngredientDto, Ingredient>();
 	}
 }

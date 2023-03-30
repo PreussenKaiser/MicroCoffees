@@ -9,12 +9,12 @@ namespace MicroCoffees.Api.Application.Handlers;
 /// <summary>
 /// 
 /// </summary>
-public sealed class AddRequestHandler : IRequestHandler<AddRequest, IResult>
+public sealed class AddRequestHandler : IRequestHandler<AddRequest, bool>
 {
 	/// <summary>
 	/// The database to query.
 	/// </summary>
-	private readonly CoffeeContext context;
+	private readonly ICoffeeRepository coffeeRepository;
 
 	/// <summary>
 	/// Maps DTOs to entities.
@@ -24,10 +24,10 @@ public sealed class AddRequestHandler : IRequestHandler<AddRequest, IResult>
 	/// <summary>
 	/// Initializes the <see cref="AddRequestHandler"/> class.
 	/// </summary>
-	/// <param name="context">The database to query.</param>
-	public AddRequestHandler(CoffeeContext context, IMapper mapper)
+	/// <param name="coffeeRepository">The database to query.</param>
+	public AddRequestHandler(ICoffeeRepository coffeeRepository, IMapper mapper)
 	{
-		this.context = context;
+		this.coffeeRepository = coffeeRepository;
 		this.mapper = mapper;
 	}
 
@@ -37,16 +37,14 @@ public sealed class AddRequestHandler : IRequestHandler<AddRequest, IResult>
 	/// <param name="request"></param>
 	/// <param name="cancellationToken"></param>
 	/// <returns></returns>
-	public async Task<IResult> Handle(AddRequest request, CancellationToken cancellationToken)
+	public async Task<bool> Handle(AddRequest request, CancellationToken cancellationToken)
 	{
-		// TODO: Validation
-
 		Coffee coffee = this.mapper.Map<Coffee>(request.Coffee);
 
-		await this.context.Coffees.AddAsync(coffee, cancellationToken);
+		await this.coffeeRepository.AddAsync(coffee);
 
-		await this.context.SaveChangesAsync(cancellationToken);
+		await this.coffeeRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-		return Results.Created($"/coffees/{coffee.Id}", request.Coffee);
+		return true;
 	}
 }

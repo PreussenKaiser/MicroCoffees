@@ -8,20 +8,20 @@ namespace MicroCoffees.Api.Application.Handlers;
 /// <summary>
 /// 
 /// </summary>
-public sealed class ServeRequestHandler : IRequestHandler<ServeRequest, IResult>
+public sealed class ServeRequestHandler : IRequestHandler<ServeRequest, bool>
 {
 	/// <summary>
 	/// Th database to query.
 	/// </summary>
-	private readonly CoffeeContext context;
+	private readonly ICoffeeRepository coffeeRepository;
 
 	/// <summary>
 	/// Initializes the <see cref="ServeRequestHandler"/> class.
 	/// </summary>
-	/// <param name="context">The database to query.</param>
-	public ServeRequestHandler(CoffeeContext context)
+	/// <param name="coffeeRepository">The database to query.</param>
+	public ServeRequestHandler(ICoffeeRepository coffeeRepository)
 	{
-		this.context = context;
+		this.coffeeRepository = coffeeRepository;
 	}
 
 	/// <summary>
@@ -30,29 +30,30 @@ public sealed class ServeRequestHandler : IRequestHandler<ServeRequest, IResult>
 	/// <param name="request"></param>
 	/// <param name="cancellationToken"></param>
 	/// <returns></returns>
-	public async Task<IResult> Handle(ServeRequest request, CancellationToken cancellationToken)
+	public async Task<bool> Handle(ServeRequest request, CancellationToken cancellationToken)
 	{
-		Coffee? coffee = await this.context.Coffees.FindAsync(
-			request.Id, cancellationToken);
+		Coffee? coffee = await this.coffeeRepository.FindAsync(request.Id);
 
 		if (coffee is null)
 		{
-			return Results.BadRequest();
+			return false;
 		}
 
 		try
 		{
 			coffee.Serve();
 
-			await this.context.SaveChangesAsync();
+			await this.coffeeRepository
+				.UnitOfWork
+				.SaveChangesAsync(cancellationToken);
 		}
 		catch (InvalidOperationException)
 		{
 			// TODO: Log
 
-			return Results.Conflict();
+			return false;
 		}
 
-		return Results.Ok();
+		return true;
 	}
 }

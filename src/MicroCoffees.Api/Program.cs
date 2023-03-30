@@ -1,7 +1,8 @@
 using MicroCoffees.Api.Application.Mapping;
-using MicroCoffees.Api.Application.Requests;
 using MicroCoffees.Api.Endpoints;
 using MicroCoffees.Api.Infrastructure;
+using MicroCoffees.Api.Infrastructure.Repositories;
+using MicroCoffees.Domain.Entities.CoffeeAggregate;
 using MicroCoffees.Domain.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("Default")
 	?? throw new ArgumentException("Could not configure database connection.");
 
-builder.Services.AddAuthorization();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services
+	.AddEndpointsApiExplorer()
+	.AddSwaggerGen();
 
 builder.Services
 	.AddAutoMapper(typeof(CoffeeProfile).Assembly)
@@ -20,6 +20,7 @@ builder.Services
 
 builder.Services
 	.AddScoped<IUnitOfWork, CoffeeContext>()
+	.AddScoped<ICoffeeRepository, CoffeeRepository>()
 	.AddDbContext<CoffeeContext>(
 		options => options.UseSqlServer(connectionString));
 
@@ -37,19 +38,12 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapGroup("/api/coffees/")
-   .MediatePost<AddRequest>()
-   .MediateGet<GetAllRequest>("page/{page:int?}/count/{count:int?}")
-   .MediateGet<GetCoffeeRequest>("{id:guid}")
-   .MediatePut<ServeRequest>("{id:guid}");
+   .MapCoffees();
 
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
+	app.UseSwagger()
+	   .UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.Run();

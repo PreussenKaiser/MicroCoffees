@@ -6,5 +6,5 @@ namespace MicroCoffees.Domain.Events;
 /// <summary>
 /// The event for removing a coffee.
 /// </summary>
-/// <param name="Id">The <see cref="Coffee"/> to remove.</param>
-public sealed record RemoveCoffeeEvent(Guid Id) : INotification;
+/// <param name="Coffee">The <see cref="Coffee"/> to remove.</param>
+public sealed record RemoveCoffeeEvent(Coffee Coffee) : INotification;
