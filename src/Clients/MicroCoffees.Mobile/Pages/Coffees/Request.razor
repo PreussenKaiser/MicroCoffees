@@ -1,0 +1,78 @@
+@page "/coffees/request"
+
+@using MicroCoffees.Mobile.Models;
+@using MicroCoffees.Mobile.Services;
+
+@inject ICoffeeService CoffeeService
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-sm-6 mx-auto">
+            <EditForm Model="this.coffee" OnValidSubmit="this.Submit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="row mb-3">
+                    <div class="col-sm-6 mb-sm-3">
+                        <label class="form-label">Name</label>
+                        <InputText @bind-Value="this.coffee.Name" class="form-control" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label">Image Url</label>
+                        <InputText @bind-Value="this.coffee.ImageUrl" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Roast</label>
+                    <InputSelect @bind-Value="this.coffee.Roast" class="form-select">
+                        <option class="@Roast.Light">Light</option>
+                        <option class="@Roast.Medium">Medium</option>
+                        <option class="@Roast.Dark">Dark</option>
+                    </InputSelect>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-6">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" min="1" @bind-value="this.coffee.Count" class="form-control" />
+                    </div>
+                    <div class="col-sm-6 mb-sm-3">
+                        <label class="form-label">Cost</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" value="@this.coffee.Cost" class="form-control" disabled />
+                            <span class="input-group-text">.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <a href="/coffees" class="btn btn-lg btn-danger w-100">
+                            Back
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <input type="Submit" value="Request" class="btn btn-lg btn-primary w-100" />
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    /// <summary>
+    /// The <see cref="Coffee"/> model to bind to.
+    /// </summary>
+    private readonly Coffee coffee = new();
+
+    /// <summary>
+    /// Executes a command to request the coffee.
+    /// </summary>
+    private void Submit()
+    {
+        this.CoffeeService.RequestCoffee(coffee);
+    }
+}

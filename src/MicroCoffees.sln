@@ -3,13 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroCoffees.Api", "MicroCoffees.Api\MicroCoffees.Api.csproj", "{D6C39D93-632A-461D-8CCB-3258E09C0CA1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroCoffees.Domain", "MicroCoffees.Domain\MicroCoffees.Domain.csproj", "{30CF0935-4606-4C92-9093-2578A86FAD73}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroCoffees.Mobile", "MicroCoffees.Mobile\MicroCoffees.Mobile.csproj", "{C2E013DF-1039-42D1-BE6D-61437A3D1B34}"
-EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{5F69950C-92DC-4824-A382-812708736C84}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{04895AB4-6684-4DC4-8C41-87D662765781}"
+	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+		..\.gitignore = ..\.gitignore
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroCoffees.Mobile", "Clients\MicroCoffees.Mobile\MicroCoffees.Mobile.csproj", "{1A58559C-769F-45B5-AB68-548576A72397}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroCoffees.Coffees", "Services\MicroCoffees.Coffees\MicroCoffees.Coffees.csproj", "{13E67F5E-CF6D-40FC-B9A7-03D4E12C9C82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,24 +22,20 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D6C39D93-632A-461D-8CCB-3258E09C0CA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D6C39D93-632A-461D-8CCB-3258E09C0CA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D6C39D93-632A-461D-8CCB-3258E09C0CA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D6C39D93-632A-461D-8CCB-3258E09C0CA1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30CF0935-4606-4C92-9093-2578A86FAD73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30CF0935-4606-4C92-9093-2578A86FAD73}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30CF0935-4606-4C92-9093-2578A86FAD73}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30CF0935-4606-4C92-9093-2578A86FAD73}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C2E013DF-1039-42D1-BE6D-61437A3D1B34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C2E013DF-1039-42D1-BE6D-61437A3D1B34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C2E013DF-1039-42D1-BE6D-61437A3D1B34}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{C2E013DF-1039-42D1-BE6D-61437A3D1B34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C2E013DF-1039-42D1-BE6D-61437A3D1B34}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C2E013DF-1039-42D1-BE6D-61437A3D1B34}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{5F69950C-92DC-4824-A382-812708736C84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5F69950C-92DC-4824-A382-812708736C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F69950C-92DC-4824-A382-812708736C84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F69950C-92DC-4824-A382-812708736C84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A58559C-769F-45B5-AB68-548576A72397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A58559C-769F-45B5-AB68-548576A72397}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A58559C-769F-45B5-AB68-548576A72397}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1A58559C-769F-45B5-AB68-548576A72397}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A58559C-769F-45B5-AB68-548576A72397}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A58559C-769F-45B5-AB68-548576A72397}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{13E67F5E-CF6D-40FC-B9A7-03D4E12C9C82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13E67F5E-CF6D-40FC-B9A7-03D4E12C9C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13E67F5E-CF6D-40FC-B9A7-03D4E12C9C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13E67F5E-CF6D-40FC-B9A7-03D4E12C9C82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
