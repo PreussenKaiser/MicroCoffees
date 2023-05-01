@@ -1,13 +1,12 @@
 ﻿using MicroCoffees.Mobile.Models;
 using MicroCoffees.Mobile.Services;
-using System.Windows.Input;
 
 namespace MicroCoffees.Mobile.ViewModels;
 
 /// <summary>
 /// The view model for the '/coffees' page.
 /// </summary>
-internal sealed class CoffeesViewModel : ViewModelBase
+internal sealed class CoffeesViewModel : PaginatedViewModel
 {
 	/// <summary>
 	/// The service to get coffees from.
@@ -28,24 +27,8 @@ internal sealed class CoffeesViewModel : ViewModelBase
 		this.coffeeService = coffeeService;
 		this.coffees = Enumerable.Empty<Coffee>();
 
-		this.RefreshCommand = new Command(this.RefreshAsync);
-		this.CancelOrderCommand = new Command(this.CancelOrderAsync);
+		this.Count = 8;
 	}
-
-	/// <summary>
-	/// Gets the command to refresh the page.
-	/// </summary>
-	public ICommand RefreshCommand { get; }
-
-	/// <summary>
-	/// Gets the command to update the quantity of a coffee.
-	/// </summary>
-	public ICommand SetQuantityCommand { get; }
-
-	/// <summary>
-	/// Gets the command to cancel a coffee order.
-	/// </summary>
-	public ICommand CancelOrderCommand { get; }
 
 	/// <summary>
 	/// Gets the list of coffees to show.
@@ -60,9 +43,9 @@ internal sealed class CoffeesViewModel : ViewModelBase
 	/// Refreshes the coffees list.
 	/// </summary>
 	/// <returns>Whether the task was completed or not.</returns>
-	private async void RefreshAsync()
+	public async Task RefreshAsync()
 	{
-		this.Coffees = await this.coffeeService.SearchAsync();
+		this.Coffees = await this.coffeeService.SearchAsync(this.Page, this.Count);
 	}
 
 	/// <summary>
@@ -70,7 +53,7 @@ internal sealed class CoffeesViewModel : ViewModelBase
 	/// </summary>
 	/// <param name="parameter">The identifier of the coffee to cancel.</param>
 	/// <returns>Whether the task was completed or not.</returns>
-	private async void CancelOrderAsync(object parameter)
+	public async Task CancelOrderAsync(object parameter)
 	{
 		if (parameter is not Guid coffeeId)
 		{
@@ -78,9 +61,46 @@ internal sealed class CoffeesViewModel : ViewModelBase
 		}
 
 		await this.coffeeService.CancelAsync(coffeeId);
+
+		await this.RefreshAsync();
 	}
 
-	private async void SetQuantityAsync(object parameter)
+	/// <summary>
+	/// Sets the quantity of a coffee.
+	/// </summary>
+	/// <remarks>Refreshes entire list when only one item is changed.</remarks>
+	/// <param name="coffeeId">The identifier of the coffee being updated.</param>
+	/// <param name="quantity">The new quantity.</param>
+	/// <returns>Whether the task was completed or not.</returns>
+	public async Task SetQuantityAsync(Guid coffeeId, int quantity)
 	{
+		if (quantity <= 0)
+		{
+			await this.coffeeService.CancelAsync(coffeeId);
+
+			return;
+		}
+
+		await this.coffeeService.UpdateQuantityAsync(coffeeId, quantity);
+
+		await this.RefreshAsync();
+	}
+
+	/// <inheritdoc/>
+	public override async Task NextAsync()
+	{
+		this.Page += this.Count;
+
+		this.Coffees = await this.coffeeService.SearchAsync(this.Page, this.Count);
+	}
+
+	/// <inheritdoc/>
+	public override async Task BackAsync()
+	{
+		this.Page = this.Page - this.Count >= 0
+			? this.Page - this.Count
+			: 0;
+
+		this.Coffees = await this.coffeeService.SearchAsync(this.Page, this.Count);
 	}
 }

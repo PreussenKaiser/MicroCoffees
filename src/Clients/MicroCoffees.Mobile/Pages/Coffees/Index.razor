@@ -11,13 +11,6 @@
 <Binder BindingContext="this.ViewModel">
     <div class="container">
         <div class="row my-3">
-            <div class="col-12">
-                <a href="/coffees/request" class="btn btn-lg btn-primary w-100">
-                    Request
-                </a>
-            </div>
-        </div>
-        <div class="row mb-3">
             @foreach (var coffee in this.ViewModel.Coffees)
             {
                 <div class="col-12 mb-3">
@@ -40,7 +33,7 @@
                                 <div class="card-body row">
                                     <div class="col-sm-6 col-md-4">
                                         <label class="form-label">Quantity</label>
-                                        <select class="form-control" @onchange="@(async (args) => await this.SelectChanged(args, coffee.Id))">
+                                        <select class="form-control" @onchange="(args) => this.SelectChanged(args, coffee.Id)">
                                             @for (int i = 0; i <= 8; i++)
                                             {
                                                 if (i == 0)
@@ -64,7 +57,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <br>
-                                        <button @onclick="() => this.ViewModel.CancelOrderCommand.Execute(coffee.Id)" type="button" class="btn btn-danger">
+                                        <button @onclick="() => this.ViewModel.CancelOrderAsync(coffee.Id)" type="button" class="btn btn-danger">
                                             Cancel
                                         </button>
                                     </div>
@@ -76,91 +69,59 @@
             }
         </div>
         <div class="row mb-3">
-            <div class="col-6">        
-                <a @onclick="@(async () => await this.RefreshAsync(this.page - 8))" type="button" class="btn btn-lg btn-outline-danger w-100 @this.backActiveCssClass">
-                    Previous
-                </a>
+            <div class="col-6">
+                @if (this.ViewModel.Page >= 8)
+                {                 
+                    <a @onclick="this.ViewModel.BackAsync" type="button" class="btn btn-lg btn-outline-danger w-100">
+                        Previous
+                    </a>
+                }
             </div>
             <div class="col-6">
-                <button @onclick="@(async () => await this.RefreshAsync(this.page + 8))" type="button" class="btn btn-lg btn-outline-primary w-100 @this.nextActiveCssClass">
-                    Next
-                </button>
+                @if (this.ViewModel.Coffees.Count() >= 8)
+                {             
+                    <button @onclick="this.ViewModel.NextAsync" type="button" class="btn btn-lg btn-outline-primary w-100">
+                        Next
+                    </button>
+                }
+            </div>
+        </div>
+        <div class="row position-sticky bottom-0 end">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="/coffees/request" class="btn btn-lg btn-primary w-100">
+                            Request
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </Binder>
 
-
 @code {
     /// <summary>
-    /// The current page of coffees.
+    /// Initializes the component with coffees.
     /// </summary>
-    private int page = 0;
-
-    /// <summary>
-    /// The CSS class which determines if the back button should be enabled or not.
-    /// </summary>
-    private string? backActiveCssClass;
-
-    /// <summary>
-    /// The CSS class which determines if the next button be be enabled or not.
-    /// </summary>
-    private string? nextActiveCssClass;
-
-    /// <summary>
-    /// The customer's requested coffees.
-    /// </summary>
-    private IEnumerable<Coffee> coffees = Enumerable.Empty<Coffee>();
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="args"></param>
-    /// <param name="id"></param>
     /// <returns>Whether the task was completed or not.</returns>
-    private async Task SelectChanged(ChangeEventArgs args, Guid id)
+    protected override async Task OnInitializedAsync()
     {
-        int qty = int.Parse(args.Value!.ToString()!);
-
-        if (qty == 0)
-        {
-            await this.CoffeeService.CancelAsync(id);
-
-            return;
-        }
-
-        await this.CoffeeService.UpdateQuantityAsync(id, qty);
-
-        await this.RefreshAsync();
+        await this.ViewModel.RefreshAsync();
     }
 
     /// <summary>
-    /// Initializes the list of coffees.
+    /// Parses select change values.
     /// </summary>
-    protected override void OnInitialized()
-    {
-        this.ViewModel.RefreshCommand.Execute(null);
-    }
-
-    /// <summary>
-    /// Refreshes the current list of coffees.
-    /// </summary>
+    /// <param name="arguments">Selec6 change arguments.</param>
+    /// <param name="coffeeId">The coffee to update the quantity of.</param>
     /// <returns>Whether the task was completed or not.</returns>
-    private async Task RefreshAsync(int page = 0)
+    private async Task SelectChanged(
+        ChangeEventArgs arguments, Guid coffeeId)
     {
-        this.page = page;
-        this.coffees = await this.CoffeeService.SearchAsync(page);
+        int quantity = int.Parse(arguments.Value as string
+            ?? throw new ArgumentException("Selected value is not a number."));
 
-        const string DISABLED = "disabled";
-        const string ENABLED = "active";
-
-        // TODO: Last page will always be empty.
-        this.nextActiveCssClass = this.coffees.Count() < 7
-            ? DISABLED
-            : ENABLED;
-
-        this.backActiveCssClass = this.page == 0
-            ? DISABLED
-            : ENABLED;
+        await this.ViewModel.SetQuantityAsync(coffeeId, quantity);
     }
 }
