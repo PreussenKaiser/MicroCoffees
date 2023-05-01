@@ -11,10 +11,14 @@ namespace MicroCoffees.Coffees.Infrastructure.EntityConfiguration;
 public sealed class CoffeeConfiguration : IEntityTypeConfiguration<Coffee>
 {
 	/// <summary>
+	/// Coffees to seed.
 	/// 
 	/// </summary>
 	private readonly Coffee[] seededCoffees;
 
+	/// <summary>
+	/// Initializes the <see cref="CoffeeConfiguration"/> class,
+	/// </summary>
 	public CoffeeConfiguration()
 	{
 		this.seededCoffees = new Coffee[12]
@@ -61,34 +65,34 @@ public sealed class CoffeeConfiguration : IEntityTypeConfiguration<Coffee>
 				new Quantity(5),
 				Roast.Light),
 
-			new("",
+			new("Line 32",
 				"",
-				new CostUsd(0.00m),
+				new CostUsd(31.99m),
+				new Quantity(3),
+				Roast.Light),
+
+			new("AbstractCoffeeFactorySingleton",
+				"",
+				new CostUsd(2.99m),
+				new Quantity(2),
+				Roast.Medium),
+
+			new("Imposter Syndrome",
+				"",
+				new CostUsd(99.99m),
+				new Quantity(1),
+				Roast.Dark),
+
+			new("10x Coffee",
+				"",
+				new CostUsd(9.99m),
 				new Quantity(1),
 				Roast.Light),
 
-			new("",
+			new("Eight Bitter",
 				"",
-				new CostUsd(0.00m),
-				new Quantity(1),
-				Roast.Light),
-
-			new("",
-				"",
-				new CostUsd(0.00m),
-				new Quantity(1),
-				Roast.Light),
-
-			new("",
-				"",
-				new CostUsd(0.00m),
-				new Quantity(1),
-				Roast.Light),
-
-			new("",
-				"",
-				new CostUsd(0.00m),
-				new Quantity(1),
+				new CostUsd(7.99m),
+				new Quantity(8),
 				Roast.Light),
 		};
 	}
@@ -120,5 +124,7 @@ public sealed class CoffeeConfiguration : IEntityTypeConfiguration<Coffee>
 			.HasConversion(
 				q => q.Value,
 				q => new Quantity(q));
+
+		builder.HasData(this.seededCoffees);
 	}
 }
