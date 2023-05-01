@@ -1,0 +1,56 @@
+﻿@using System.ComponentModel;
+
+@implements IDisposable
+
+@this.ChildContent
+
+@code {
+    /// <summary>
+    /// The content to bind to.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// The view model to bind to.
+    /// </summary>
+    [Parameter]
+    public INotifyPropertyChanged? BindingContext { get; set; }
+
+    /// <summary>
+    /// Initializes the component.
+    /// </summary>
+    protected override void OnInitialized()
+    {
+        if (this.BindingContext is null)
+        {
+            return;
+        }
+
+        this.BindingContext.PropertyChanged += this.OnPropertyChangedHandler;
+    }
+
+    /// <summary>
+    /// Notifies the view that a property has changed.
+    /// </summary>
+    /// <param name="sender">The object which sent thearguemnt.</param>
+    /// <param name="arguments">Argument values.</param>
+    private async void OnPropertyChangedHandler(
+        object sender, PropertyChangedEventArgs arguments)
+    {
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    /// <summary>
+    /// Detaches <see cref="BindingContext"/>.
+    /// </summary>
+    public void Dispose()
+    {
+        if (this.BindingContext is null)
+        {
+            return;
+        }
+
+        this.BindingContext.PropertyChanged -= this.OnPropertyChangedHandler;
+    }
+}

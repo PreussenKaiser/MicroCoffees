@@ -1,4 +1,5 @@
 ﻿using MicroCoffees.Mobile.Services;
+using MicroCoffees.Mobile.ViewModels;
 using Microsoft.Extensions.Logging;
 
 namespace MicroCoffees.Mobile;
@@ -27,6 +28,9 @@ public static class MauiProgram
 		{
 			client.BaseAddress = new Uri("http://localhost:5000/api/coffees/");
 		});
+
+		builder.Services
+			.AddSingleton<CoffeesViewModel>();
 
 		builder.Services.AddScoped<ICoffeeService, CoffeeService>();
 
