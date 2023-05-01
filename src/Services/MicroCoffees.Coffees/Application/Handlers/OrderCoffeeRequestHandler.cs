@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using MicroCoffees.Coffees.Application.Requests;
 using MicroCoffees.Coffees.Domain.Entities.CoffeeAggregate;
 
@@ -16,24 +15,18 @@ public sealed class OrderCoffeeRequestHandler : IRequestHandler<OrderCoffeeReque
 	private readonly ICoffeeRepository coffeeRepository;
 
 	/// <summary>
-	/// Maps DTOs to entities.
-	/// </summary>
-	private readonly IMapper mapper;
-
-	/// <summary>
 	/// Initializes the <see cref="OrderCoffeeRequestHandler"/> class.
 	/// </summary>
 	/// <param name="coffeeRepository">The database to query.</param>
-	public OrderCoffeeRequestHandler(ICoffeeRepository coffeeRepository, IMapper mapper)
+	public OrderCoffeeRequestHandler(ICoffeeRepository coffeeRepository)
 	{
 		this.coffeeRepository = coffeeRepository;
-		this.mapper = mapper;
 	}
 
 	/// <inheritdoc/>
 	public async Task<bool> Handle(OrderCoffeeRequest request, CancellationToken cancellationToken)
 	{
-		Coffee coffee = this.mapper.Map<Coffee>(request.Coffee);
+		Coffee coffee = request.Coffee.To();
 
 		await this.coffeeRepository.RequestAsync(coffee);
 

@@ -3,6 +3,7 @@
 @using MicroCoffees.Mobile.Models;
 @using MicroCoffees.Mobile.Services;
 
+@inject NavigationManager NavigationManager
 @inject ICoffeeService CoffeeService
 
 <div class="container mt-3">
@@ -35,7 +36,7 @@
                 <div class="row mb-3">
                     <div class="col-sm-6">
                         <label class="form-label">Quantity</label>
-                        <input type="number" min="1" @bind-value="this.coffee.Count" class="form-control" />
+                        <input type="number" min="1" @bind-value="this.coffee.Quantity" class="form-control" />
                     </div>
                     <div class="col-sm-6 mb-sm-3">
                         <label class="form-label">Cost</label>
@@ -74,5 +75,7 @@
     private void Submit()
     {
         this.CoffeeService.RequestCoffee(coffee);
+
+        this.NavigationManager.NavigateTo("/coffees");
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace MicroCoffees.Coffees.Domain.Entities.CoffeeAggregate;
+﻿using MicroCoffees.Coffees.Domain.ValueObjects;
+
+namespace MicroCoffees.Coffees.Domain.Entities.CoffeeAggregate;
 
 /// <summary>
 /// Represents a coffee sold by the shop.
@@ -12,6 +14,8 @@ public sealed class Coffee : Entity
 	{
 		this.Name ??= string.Empty;
 		this.ImageUrl ??=  string.Empty;
+		this.Cost = new CostUsd(0);
+		this.Quantity = new Quantity(1);
 	}
 
 	/// <summary>
@@ -24,14 +28,14 @@ public sealed class Coffee : Entity
 	public Coffee(
 		string name,
 		string imageUrl,
-		decimal cost,
-		int quantity,
+		CostUsd cost,
+		Quantity quantity,
 		Roast roast) : this()
 	{
 		this.Name = name;
 		this.ImageUrl = imageUrl;
 		this.Cost = cost;
-		this.Quantity = quantity > 0 ? quantity : 1;
+		this.Quantity = quantity;
 		this.Roast = roast;
 	}
 
@@ -48,12 +52,12 @@ public sealed class Coffee : Entity
 	/// <summary>
 	/// The coffee's cost.
 	/// </summary>
-	public decimal Cost { get; private set; }
+	public CostUsd Cost { get; private set; }
 
 	/// <summary>
 	/// How much of this <see cref="Coffee"/> the shop has in stock.
 	/// </summary>
-	public int Quantity { get; private set; }
+	public Quantity Quantity { get; private set; }
 
 	/// <summary>
 	/// The coffee's roast type.
@@ -67,9 +71,9 @@ public sealed class Coffee : Entity
 	/// <returns>Updated instance.</returns>
 	public Coffee UpdateQuantity(int qty)
 	{
-		this.Quantity = qty;
+		this.Quantity = new Quantity(qty);
 
-		this.Cost = (qty * 8) + (int)this.Roast;
+		this.Cost = new CostUsd((qty * Quantity.MAX_VALUE) + (int)this.Roast);
 
 		return this;
 	}

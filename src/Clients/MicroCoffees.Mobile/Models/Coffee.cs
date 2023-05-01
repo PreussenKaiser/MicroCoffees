@@ -15,7 +15,7 @@ public sealed class Coffee
 		this.Id = Guid.NewGuid();
 		this.Name = string.Empty;
 		this.ImageUrl = string.Empty;
-		this.Count = 1;
+		this.Quantity = 1;
 	}
 
 	/// <summary>
@@ -43,14 +43,14 @@ public sealed class Coffee
 	/// </summary>
 	[Required]
 	public decimal Cost
-		=> (this.Count * 8) + (decimal)this.Roast;
+		=> (this.Quantity * 8) + (decimal)this.Roast;
 
 	/// <summary>
 	/// The coffee's quantity.
 	/// </summary>
 	[Required]
 	[Range(1, int.MaxValue)]
-	public int Count { get; set; }
+	public int Quantity { get; set; }
 
 	public Roast Roast { get; set; }
 }

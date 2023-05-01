@@ -13,26 +13,31 @@
             </a>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-3">
         @foreach (var coffee in this.coffees)
         {
-            <div class="col-12">
+            <div class="col-12 mb-3">
                 <div class="card border-primary border-5 rounded">
                     <div class="row">
-                        <div class="col-6 d-flex justify-content-between">
-                            <img style="max-width: 128px" src="@coffee.ImageUrl" />
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">@coffee.Name</h5>
-                                <h6>Roast: @coffee.Roast</h6>
-                            </div>
-
-                        </div>
-                        <div class="col-6 my-3">
+                        <div class="col-sm-6">
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
+                                    <img class="w-100" src="@coffee.ImageUrl" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="card-body">
+                                        <h5 class="card-title fw-bold">@coffee.Name</h5>
+                                        <h6>Roast: @coffee.Roast</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card-body row">
+                                <div class="col-sm-6 col-md-4">
                                     <label class="form-label">Quantity</label>
-                                    <select class="form-control" @onchange="@(async (args) => this.SelectChanged(args, coffee.Id))">
-                                        @for (int i = 0; i < 8; i++)
+                                    <select class="form-control" @onchange="@(async (args) => await this.SelectChanged(args, coffee.Id))">
+                                        @for (int i = 0; i <= 8; i++)
                                         {
                                             if (i == 0)
                                             {
@@ -40,14 +45,12 @@
                                             }
                                             else
                                             {
-                                                bool selected = i == coffee.Count;
-
-                                                <option selected="@selected" value="@i">@i</option>
+                                                <option selected="@(i == coffee.Quantity)" value="@i">@i</option>
                                             }
                                         }
                                     </select>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-6 col-md-4">
                                     <label class="form-label">Cost</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
@@ -55,7 +58,7 @@
                                         <span class="input-group-text">.00</span>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-md-4">
                                     <br>
                                     <button @onclick="@(async () => await this.CancelRequest(coffee.Id))" type="button" class="btn btn-danger">
                                         Cancel
@@ -65,20 +68,53 @@
                         </div>
                     </div>
                 </div>
-            </div>  
+            </div>
         }
+    </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            <a @onclick="@(async () => await this.RefreshAsync(this.page - 8))" type="button" class="btn btn-lg btn-outline-danger w-100 @this.backActiveCssClass">
+                Previous
+            </a>
+        </div>
+        <div class="col-6">
+            <button @onclick="@(async () => await this.RefreshAsync(this.page + 8))" type="button" class="btn btn-lg btn-outline-primary w-100 @this.nextActiveCssClass">
+                Next
+            </button>
+        </div>
     </div>
 </div>
 
 @code {
     /// <summary>
+    /// The current page of coffees.
+    /// </summary>
+    private int page = 0;
+
+    /// <summary>
+    /// The CSS class which determines if the back button should be enabled or not.
+    /// </summary>
+    private string? backActiveCssClass;
+
+    /// <summary>
+    /// The CSS class which determines if the next button be be enabled or not.
+    /// </summary>
+    private string? nextActiveCssClass;
+
+    /// <summary>
     /// The customer's requested coffees.
     /// </summary>
     private IEnumerable<Coffee> coffees = Enumerable.Empty<Coffee>();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="args"></param>
+    /// <param name="id"></param>
+    /// <returns>Whether the task was completed or not.</returns>
     private async Task SelectChanged(ChangeEventArgs args, Guid id)
     {
-        int qty = int.Parse(args.Value.ToString());
+        int qty = int.Parse(args.Value!.ToString()!);
 
         if (qty == 0)
         {
@@ -88,11 +124,20 @@
         }
 
         await this.CoffeeService.UpdateQuantityAsync(id, qty);
+
+        await this.RefreshAsync();
     }
 
+    /// <summary>
+    /// Cancels a coffee request.
+    /// </summary>
+    /// <param name="id">The identifier of the request to cancel.</param>
+    /// <returns>Whether the task was completed or not.</returns>
     private async Task CancelRequest(Guid id)
     {
         await this.CoffeeService.CancelAsync(id);
+
+        await this.RefreshAsync();
     }
 
     /// <summary>
@@ -101,6 +146,28 @@
     /// <returns>Whether the task was completed or not.</returns>
     protected override async Task OnInitializedAsync()
     {
-        this.coffees = await this.CoffeeService.SearchAsync();
+        await this.RefreshAsync();
+    }
+
+    /// <summary>
+    /// Refreshes the current list of coffees.
+    /// </summary>
+    /// <returns>Whether the task was completed or not.</returns>
+    private async Task RefreshAsync(int page = 0)
+    {
+        this.page = page;
+        this.coffees = await this.CoffeeService.SearchAsync(page);
+
+        const string DISABLED = "disabled";
+        const string ENABLED = "active";
+
+        // TODO: Last page will always be empty.
+        this.nextActiveCssClass = this.coffees.Count() < 7
+            ? DISABLED
+            : ENABLED;
+
+        this.backActiveCssClass = this.page == 0
+            ? DISABLED
+            : ENABLED;
     }
 }

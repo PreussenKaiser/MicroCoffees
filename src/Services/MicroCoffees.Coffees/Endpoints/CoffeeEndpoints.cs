@@ -19,7 +19,7 @@ public static class CoffeeEndpoints
 		builder.MapPost(string.Empty, OrderCoffeeAsync);
 		builder.MapGet("page/{page:int?}/count/{count:int?}", SearchCoffeesAsync);
 		builder.MapGet("{id:guid}", FindCoffeeAsync);
-		builder.MapPatch("{id:guid}", UpdateQuantityAsync);
+		builder.MapPatch("{id:guid}/qty/{quantity:int}", UpdateQuantityAsync);
 		builder.MapDelete("{id:guid}", CancelAsync);
 
 		return builder;

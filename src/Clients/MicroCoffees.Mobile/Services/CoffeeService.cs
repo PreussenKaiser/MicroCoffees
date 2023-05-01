@@ -1,5 +1,8 @@
 ﻿using MicroCoffees.Mobile.Models;
+using Microsoft.Maui.Controls.Internals;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 
 namespace MicroCoffees.Mobile.Services;
 
@@ -48,8 +51,10 @@ public sealed class CoffeeService : ICoffeeService
 	/// <inheritdoc/>
 	public async Task UpdateQuantityAsync(Guid id, int qty)
 	{
-		await this.client.PatchAsJsonAsync(
-			string.Empty, new { Id = id, Quantity = qty });
+		HttpRequestMessage request = new(
+			HttpMethod.Patch, $"{id}/qty/{qty}");
+
+		await this.client.SendAsync(request);
 	}
 
 	/// <inheritdoc/>

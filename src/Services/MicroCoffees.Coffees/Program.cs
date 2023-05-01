@@ -1,4 +1,3 @@
-using MicroCoffees.Coffees.Application.Mapping;
 using MicroCoffees.Coffees.Endpoints;
 using MicroCoffees.Coffees.Infrastructure;
 using MicroCoffees.Coffees.Infrastructure.Repositories;
@@ -14,9 +13,7 @@ builder.Services
 	.AddEndpointsApiExplorer()
 	.AddSwaggerGen();
 
-builder.Services
-	.AddAutoMapper(typeof(CoffeeProfile).Assembly)
-	.AddMediatR(options => options.RegisterServicesFromAssemblyContaining<Program>());
+builder.Services.AddMediatR(options => options.RegisterServicesFromAssemblyContaining<Program>());
 
 builder.Services
 	.AddScoped<IUnitOfWork, CoffeeContext>()

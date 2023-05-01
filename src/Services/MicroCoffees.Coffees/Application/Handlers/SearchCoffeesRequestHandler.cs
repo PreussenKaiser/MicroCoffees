@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using MicroCoffees.Coffees.Application.DTOs;
 using MicroCoffees.Coffees.Application.Requests;
 using MicroCoffees.Coffees.Domain.Entities.CoffeeAggregate;
@@ -17,32 +16,32 @@ public sealed class SearchCoffeesRequestHandler : IRequestHandler<SearchCoffeesR
 	private readonly ICoffeeRepository coffeeRepository;
 
 	/// <summary>
-	/// Maps DTO's to entities.
+	/// Logs request processes.
 	/// </summary>
-	private readonly IMapper mapper;
+	private readonly ILogger<SearchCoffeesRequestHandler> logger;
 
 	/// <summary>
 	/// Initializes the <see cref="SearchCoffeesRequestHandler"/> class.
 	/// </summary>
 	/// <param name="coffeeRepository">The database to query.</param>
-	/// <param name="mapper">Maps DTOs to entities.</param>
-	public SearchCoffeesRequestHandler(ICoffeeRepository coffeeRepository, IMapper mapper)
+	/// <param name="logger">Logs request processes.</param>
+	public SearchCoffeesRequestHandler(
+		ICoffeeRepository coffeeRepository,
+		ILogger<SearchCoffeesRequestHandler> logger)
 	{
 		this.coffeeRepository = coffeeRepository;
-		this.mapper = mapper;
+		this.logger = logger;
 	}
 
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="request"></param>
-	/// <param name="cancellationToken"></param>
-	/// <returns></returns>
+	/// <inheri
 	public async Task<IEnumerable<CoffeeDto>> Handle(SearchCoffeesRequest request, CancellationToken cancellationToken)
 	{
 		IEnumerable<CoffeeDto> coffees = (await this.coffeeRepository
 			.SearchAsync(request.Page, request.Count))
-			.Select(c => this.mapper.Map<CoffeeDto>(c));
+			.Select(CoffeeDto.From);
+
+		this.logger.LogInformation(
+			$"{request.Count} coffees were queried with {request.Page} skipped.");
 
 		return coffees;
 	}

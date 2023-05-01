@@ -40,7 +40,7 @@ public interface ICoffeeRepository
 	/// </summary>
 	/// <param name="id">References the <see cref="Coffee"/> to update.</param>
 	/// <param name="qty">The coffee's new quantity</param>
-	/// <returns>Whether the task was completed or not.</returns>
+	/// <returns>The updated coffee.</returns>
 	Task UpdateQuantityAsync(Guid id, int qty);
 
 	/// <summary>
