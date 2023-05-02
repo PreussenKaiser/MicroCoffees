@@ -5,8 +5,15 @@ using Microsoft.Extensions.Logging;
 
 namespace MicroCoffees.Mobile;
 
+/// <summary>
+/// The application's entry-point.
+/// </summary>
 public static class MauiProgram
 {
+	/// <summary>
+	/// Bootstraps the application.
+	/// </summary>
+	/// <returns>A configured <see cref="MauiApp"/>.</returns>
 	public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();
@@ -27,7 +34,7 @@ public static class MauiProgram
 
 		builder.Services.AddHttpClient("coffees", client =>
 		{
-			client.BaseAddress = new Uri("http://localhost:5000/api/coffees/");
+			client.BaseAddress = new Uri(Constants.CoffeesUrl);
 		});
 
 		builder.Services

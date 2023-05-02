@@ -15,21 +15,13 @@ internal sealed class RequestCoffeeViewModel : ViewModelBase
 	private readonly ICoffeeService coffeeService;
 
 	/// <summary>
-	/// Facilitates routing on form submission.
-	/// </summary>
-	private readonly NavigationManager navigationManager;
-
-	/// <summary>
 	/// Initializes the <see cref="RequestCoffeeViewModel"/> view model.
 	/// </summary>
 	/// <param name="coffeeService">The service to request a coffee with.</param>
 	/// <param name="navigationManager">Facilitates routing on form submission.</param>
-	public RequestCoffeeViewModel(
-		ICoffeeService coffeeService,
-		NavigationManager navigationManager)
+	public RequestCoffeeViewModel(ICoffeeService coffeeService)
 	{
 		this.coffeeService = coffeeService;
-		this.navigationManager = navigationManager;
 
 		this.Coffee = new();
 	}
@@ -43,10 +35,13 @@ internal sealed class RequestCoffeeViewModel : ViewModelBase
 	/// Handles a successful form submission.
 	/// </summary>
 	/// <returns>Whether the task was completed or not.</returns>
-	internal async Task SubmitAsync()
+	internal async Task SubmitAsync(NavigationManager navigationManager)
 	{
+		ArgumentNullException.ThrowIfNull(
+			navigationManager, nameof(navigationManager));
+
 		await this.coffeeService.RequestCoffee(this.Coffee);
 
-		this.navigationManager.NavigateTo("/coffees");
+		navigationManager?.NavigateTo("/coffees");
 	}
 }
