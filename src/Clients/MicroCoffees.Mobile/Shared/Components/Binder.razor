@@ -36,7 +36,7 @@
     /// <param name="sender">The object which sent thearguemnt.</param>
     /// <param name="arguments">Argument values.</param>
     private async void OnPropertyChangedHandler(
-        object sender, PropertyChangedEventArgs arguments)
+        object? sender, PropertyChangedEventArgs arguments)
     {
         await this.InvokeAsync(this.StateHasChanged);
     }

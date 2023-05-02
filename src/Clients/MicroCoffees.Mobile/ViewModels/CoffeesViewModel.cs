@@ -27,7 +27,7 @@ internal sealed class CoffeesViewModel : PaginatedViewModel
 		this.coffeeService = coffeeService;
 		this.coffees = Enumerable.Empty<Coffee>();
 
-		this.Count = 8;
+		this.Count = 9;
 	}
 
 	/// <summary>
@@ -77,11 +77,11 @@ internal sealed class CoffeesViewModel : PaginatedViewModel
 		if (quantity <= 0)
 		{
 			await this.coffeeService.CancelAsync(coffeeId);
-
-			return;
 		}
-
-		await this.coffeeService.UpdateQuantityAsync(coffeeId, quantity);
+		else
+		{
+			await this.coffeeService.UpdateQuantityAsync(coffeeId, quantity);
+		}
 
 		await this.RefreshAsync();
 	}

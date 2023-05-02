@@ -25,4 +25,10 @@ public sealed record CostUsd
 	/// Gets the cost of the item.
 	/// </summary>
 	public decimal Value { get; }
+
+	/// <inheritdoc/>
+	public override string ToString()
+	{
+		return $"${this.Value}";
+	}
 }

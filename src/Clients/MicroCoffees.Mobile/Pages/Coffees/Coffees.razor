@@ -1,0 +1,110 @@
+@page "/coffees"
+
+@using MicroCoffees.Mobile.Shared.Components
+
+@inject CoffeesViewModel ViewModel
+
+<Binder BindingContext="this.ViewModel">
+    <div class="container">
+        <div class="row my-3">
+            @foreach (var coffee in this.ViewModel.Coffees)
+            {
+                <div class="col-md-6 col-xl-4 mb-3">
+                    <div class="card border-primary border-5 rounded">
+                        <img class="w-100" src="@coffee.ImageUrl" />
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">@coffee.Name</h5>
+                            <h6>Roast: @coffee.Roast</h6>
+
+                            <div class="row my-3">
+                                <div class="col-sm-6">
+                                    <label class="form-label">Quantity</label>
+                                    <select class="form-control" @onchange="(args) => this.SelectChanged(args, coffee.Id)">
+                                        @for (int i = 0; i <= 8; i++)
+                                        {
+                                            if (i == 0)
+                                            {
+                                                <option value="0">@i (cancel order)</option>
+                                            }
+                                            else
+                                            {
+                                                <option selected="@(i == coffee.Quantity)" value="@i">@i</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="form-label">Cost</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" value="@coffee.Cost" class="form-control" disabled />
+                                        <span class="input-group-text">.00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button @onclick="() => this.ViewModel.CancelOrderAsync(coffee.Id)" type="button" class="btn btn-danger float-end">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row mb-3">
+            <div class="col-6">
+                @if (this.ViewModel.Page >= this.ViewModel.Count)
+                {                 
+                    <a @onclick="this.ViewModel.BackAsync" type="button" class="btn btn-lg btn-outline-danger w-100">
+                        Previous
+                    </a>
+                }
+            </div>
+            <div class="col-6">
+                @if (this.ViewModel.Coffees.Count() >= this.ViewModel.Count)
+                {             
+                    <button @onclick="this.ViewModel.NextAsync" type="button" class="btn btn-lg btn-outline-primary w-100">
+                        Next
+                    </button>
+                }
+            </div>
+        </div>
+        <div class="row position-sticky bottom-0 end">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="/coffees/request" class="btn btn-lg btn-primary w-100">
+                            Request
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</Binder>
+
+@code {
+    /// <summary>
+    /// Initializes the component with coffees.
+    /// </summary>
+    /// <returns>Whether the task was completed or not.</returns>
+    protected override async Task OnInitializedAsync()
+    {
+        await this.ViewModel.RefreshAsync();
+    }
+
+    /// <summary>
+    /// Parses select change values.
+    /// </summary>
+    /// <param name="arguments">Selec6 change arguments.</param>
+    /// <param name="coffeeId">The coffee to update the quantity of.</param>
+    /// <returns>Whether the task was completed or not.</returns>
+    private async Task SelectChanged(
+        ChangeEventArgs arguments, Guid coffeeId)
+    {
+        int quantity = int.Parse(arguments.Value as string
+            ?? throw new ArgumentException("Selected value is not a number."));
+
+        await this.ViewModel.SetQuantityAsync(coffeeId, quantity);
+    }
+}

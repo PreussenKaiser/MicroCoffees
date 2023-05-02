@@ -1,5 +1,6 @@
 ﻿using MicroCoffees.Mobile.Services;
 using MicroCoffees.Mobile.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace MicroCoffees.Mobile;
@@ -30,7 +31,8 @@ public static class MauiProgram
 		});
 
 		builder.Services
-			.AddSingleton<CoffeesViewModel>();
+			.AddSingleton<CoffeesViewModel>()
+			.AddSingleton<RequestCoffeeViewModel>();
 
 		builder.Services.AddScoped<ICoffeeService, CoffeeService>();
 

@@ -12,8 +12,8 @@ public sealed class Coffee : Entity
 	/// </summary>
 	public Coffee() : base()
 	{
-		this.Name ??= string.Empty;
-		this.ImageUrl ??=  string.Empty;
+		this.Name ??= new ProductName("Unknown Coffee");
+		this.ImageUrl ??=  new ImageUrl("https://vistapointe.net/images/error-3.jpg");
 		this.Cost = new CostUsd(0);
 		this.Quantity = new Quantity(1);
 	}
@@ -32,8 +32,8 @@ public sealed class Coffee : Entity
 		Quantity quantity,
 		Roast roast) : this()
 	{
-		this.Name = name;
-		this.ImageUrl = imageUrl;
+		this.Name = new ProductName(name);
+		this.ImageUrl = new ImageUrl(imageUrl);
 		this.Cost = cost;
 		this.Quantity = quantity;
 		this.Roast = roast;
@@ -42,12 +42,12 @@ public sealed class Coffee : Entity
 	/// <summary>
 	/// The coffee's name.
 	/// </summary>
-	public string Name { get; private set; }
+	public ProductName Name { get; private set; }
 
 	/// <summary>
 	/// A url leading to an image of the coffee.
 	/// </summary>
-	public string ImageUrl { get; private set; }
+	public ImageUrl ImageUrl { get; private set; }
 
 	/// <summary>
 	/// The coffee's cost.

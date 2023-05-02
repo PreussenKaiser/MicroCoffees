@@ -44,8 +44,8 @@ public sealed record CoffeeDto(
 	{
 		return new CoffeeDto(
 			coffee.Id,
-			coffee.Name,
-			coffee.ImageUrl,
+			coffee.Name.Value,
+			coffee.ImageUrl.Value,
 			coffee.Cost.Value,
 			coffee.Quantity.Value,
 			coffee.Roast);

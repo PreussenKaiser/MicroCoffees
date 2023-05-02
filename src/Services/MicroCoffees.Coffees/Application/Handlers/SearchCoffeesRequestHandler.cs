@@ -41,7 +41,7 @@ public sealed class SearchCoffeesRequestHandler : IRequestHandler<SearchCoffeesR
 			.Select(CoffeeDto.From);
 
 		this.logger.LogInformation(
-			$"{request.Count} coffees were queried with {request.Page} skipped.");
+			$"{coffees.Count()} coffees were queried with a take of {request.Count} and {request.Page} skipped.");
 
 		return coffees;
 	}

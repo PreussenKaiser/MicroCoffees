@@ -1,32 +1,29 @@
 @page "/coffees/request"
-
 @using MicroCoffees.Mobile.Models;
-@using MicroCoffees.Mobile.Services;
 
-@inject NavigationManager NavigationManager
-@inject ICoffeeService CoffeeService
+@inject RequestCoffeeViewModel ViewModel
 
 <div class="container mt-3">
     <div class="row">
         <div class="col-sm-6 mx-auto">
-            <EditForm Model="this.coffee" OnValidSubmit="this.Submit">
+            <EditForm Model="this.ViewModel.Coffee" OnValidSubmit="this.ViewModel.SubmitAsync">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
 
                 <div class="row mb-3">
                     <div class="col-sm-6 mb-sm-3">
                         <label class="form-label">Name</label>
-                        <InputText @bind-Value="this.coffee.Name" class="form-control" />
+                        <InputText @bind-Value="this.ViewModel.Coffee.Name" class="form-control" />
                     </div>
                     <div class="col-sm-6">
                         <label class="form-label">Image Url</label>
-                        <InputText @bind-Value="this.coffee.ImageUrl" class="form-control" />
+                        <InputText @bind-Value="this.ViewModel.Coffee.ImageUrl" class="form-control" />
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Roast</label>
-                    <InputSelect @bind-Value="this.coffee.Roast" class="form-select">
+                    <InputSelect @bind-Value="this.ViewModel.Coffee.Roast" class="form-select">
                         <option class="@Roast.Light">Light</option>
                         <option class="@Roast.Medium">Medium</option>
                         <option class="@Roast.Dark">Dark</option>
@@ -36,13 +33,13 @@
                 <div class="row mb-3">
                     <div class="col-sm-6">
                         <label class="form-label">Quantity</label>
-                        <input type="number" min="1" @bind-value="this.coffee.Quantity" class="form-control" />
+                        <input type="number" min="1" @bind-value="this.ViewModel.Coffee.Quantity" class="form-control" />
                     </div>
                     <div class="col-sm-6 mb-sm-3">
                         <label class="form-label">Cost</label>
                         <div class="input-group">
                             <span class="input-group-text">$</span>
-                            <input type="number" value="@this.coffee.Cost" class="form-control" disabled />
+                            <input type="number" value="@this.ViewModel.Coffee.Cost" class="form-control" disabled />
                             <span class="input-group-text">.00</span>
                         </div>
                     </div>
@@ -62,20 +59,3 @@
         </div>
     </div>
 </div>
-
-@code {
-    /// <summary>
-    /// The <see cref="Coffee"/> model to bind to.
-    /// </summary>
-    private readonly Coffee coffee = new();
-
-    /// <summary>
-    /// Executes a command to request the coffee.
-    /// </summary>
-    private void Submit()
-    {
-        this.CoffeeService.RequestCoffee(coffee);
-
-        this.NavigationManager.NavigateTo("/coffees");
-    }
-}

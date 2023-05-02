@@ -15,12 +15,21 @@ public sealed class OrderCoffeeRequestHandler : IRequestHandler<OrderCoffeeReque
 	private readonly ICoffeeRepository coffeeRepository;
 
 	/// <summary>
+	/// Logs request handling.
+	/// </summary>
+	private readonly ILogger<OrderCoffeeRequestHandler> logger;
+
+	/// <summary>
 	/// Initializes the <see cref="OrderCoffeeRequestHandler"/> class.
 	/// </summary>
 	/// <param name="coffeeRepository">The database to query.</param>
-	public OrderCoffeeRequestHandler(ICoffeeRepository coffeeRepository)
+	/// <param name="logger">Logs request processes.</param>
+	public OrderCoffeeRequestHandler(
+		ICoffeeRepository coffeeRepository,
+		ILogger<OrderCoffeeRequestHandler> logger)
 	{
 		this.coffeeRepository = coffeeRepository;
+		this.logger = logger;
 	}
 
 	/// <inheritdoc/>
@@ -30,7 +39,20 @@ public sealed class OrderCoffeeRequestHandler : IRequestHandler<OrderCoffeeReque
 
 		await this.coffeeRepository.RequestAsync(coffee);
 
-		await this.coffeeRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+		await this.coffeeRepository
+			.UnitOfWork
+			.SaveChangesAsync(cancellationToken);
+
+		Coffee? requestedCoffee = await this.coffeeRepository.FindAsync(coffee.Id);
+
+		if (requestedCoffee is null)
+		{
+			this.logger.LogWarning($"{request.Coffee.Name} order failed.");
+
+			return false;
+		}
+
+		this.logger.LogInformation($"{requestedCoffee.Name} ordered.");
 
 		return true;
 	}

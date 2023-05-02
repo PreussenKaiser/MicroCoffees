@@ -1,8 +1,5 @@
 ﻿using MicroCoffees.Mobile.Models;
-using Microsoft.Maui.Controls.Internals;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
 
 namespace MicroCoffees.Mobile.Services;
 

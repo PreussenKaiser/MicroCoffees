@@ -12,7 +12,6 @@ public sealed class CoffeeConfiguration : IEntityTypeConfiguration<Coffee>
 {
 	/// <summary>
 	/// Coffees to seed.
-	/// 
 	/// </summary>
 	private readonly Coffee[] seededCoffees;
 
@@ -24,19 +23,19 @@ public sealed class CoffeeConfiguration : IEntityTypeConfiguration<Coffee>
 		this.seededCoffees = new Coffee[12]
 		{
 			new("Generic Coffee",
-				"https://th.bing.com/th/id/OIP.CloEEL0cB_QDXljC3abB5gHaE8?pid=ImgDet&rs=1",
+				"https://news.usc.edu/files/2016/04/20140425_Coffee_web.jpg",
 				new CostUsd(7.99m),
 				new Quantity(1),
 				Roast.Light),
 
 			new("The Breakpoint",
-				"https://th.bing.com/th/id/OIP.0ADp4_DH5Lew45ZJCnJe7QHaFg?pid=ImgDet&rs=1",
+				"https://cdn.wallpapersafari.com/18/52/4lg2Ow.jpg",
 				new CostUsd(12.99m),
 				new Quantity(3),
 				Roast.Dark),
 
 			new("Monad Monster",
-				"https://th.bing.com/th/id/R.7c4b342409966068c7bb98219985480d?rik=S2kiujZKPRxB0g&riu=http%3a%2f%2f1.bp.blogspot.com%2f-1r-vd0CSMHw%2fThYLo7LSlFI%2fAAAAAAAAEXc%2fqNnSu3O6ofg%2fs1600%2fcoffee9.JPG&ehk=8SFWv%2fVEwHRDPMNZVRKhuQSSsTRK3U0%2fRHlPr5rLEys%3d&risl=&pid=ImgRaw&r=0",
+				"https://thecoffeevine.com/wp-content/uploads/2013/05/img_4869-500x375.jpg",
 				new CostUsd(9.99m),
 				new Quantity(2),
 				Roast.Medium),
@@ -53,8 +52,8 @@ public sealed class CoffeeConfiguration : IEntityTypeConfiguration<Coffee>
 				new Quantity(1),
 				Roast.Medium),
 
-			new("Function, Oriented",
-				"https://th.bing.com/th/id/OIF.sixOhvNquXnii2EqLJhfZw?pid=ImgDet&rs=1",
+			new("Funk Oriented",
+				"https://i.pinimg.com/736x/7d/5e/d8/7d5ed89982c309ac9bd993e5b0e70e15.jpg",
 				new CostUsd(19.99m),
 				new Quantity(2),
 				Roast.Light),
@@ -65,32 +64,32 @@ public sealed class CoffeeConfiguration : IEntityTypeConfiguration<Coffee>
 				new Quantity(5),
 				Roast.Light),
 
-			new("Line 32",
-				"",
+			new("Line Three",
+				"https://bestcoffeespan.com/wp-content/uploads/2021/01/aged-coffee-scaled.jpg",
 				new CostUsd(31.99m),
 				new Quantity(3),
 				Roast.Light),
 
 			new("AbstractCoffeeFactorySingleton",
-				"",
+				"https://i.pinimg.com/originals/dd/af/b5/ddafb54b7c1544f34236017df5928f0b.jpg",
 				new CostUsd(2.99m),
 				new Quantity(2),
 				Roast.Medium),
 
 			new("Imposter Syndrome",
-				"",
+				"https://fastly.4sqi.net/img/general/600x600/PMT3R1OBRPE45IPDSSYF1XCIGM3QN10JPT1N5RI0DV1CBJG4.jpg",
 				new CostUsd(99.99m),
 				new Quantity(1),
 				Roast.Dark),
 
 			new("10x Coffee",
-				"",
+				"https://farm6.staticflickr.com/5254/5438241040_b85e8556ff_n.jpg",
 				new CostUsd(9.99m),
 				new Quantity(1),
 				Roast.Light),
 
 			new("Eight Bitter",
-				"",
+				"https://eadn-wc04-202503.nxedge.io/cdn/wp-content/uploads/2013/03/coffee-clay-cup.jpg",
 				new CostUsd(7.99m),
 				new Quantity(8),
 				Roast.Light),
@@ -106,11 +105,17 @@ public sealed class CoffeeConfiguration : IEntityTypeConfiguration<Coffee>
 
 		builder
 			.Property(c => c.Name)
-			.HasMaxLength(32);
+			.HasConversion(
+				n => n.Value,
+				n => new ProductName(n))
+			.HasMaxLength(ProductName.MAX_LENGTH);
 
 		builder
 			.Property(c => c.ImageUrl)
-			.HasMaxLength(256);
+			.HasConversion(
+				i => i.Value,
+				i => new ImageUrl(i))
+			.HasMaxLength(ImageUrl.MAX_LENGTH);
 
 		builder
 			.Property(c => c.Cost)

@@ -36,6 +36,9 @@ public sealed class Coffee
 	[Display(Name = "Image")]
 	[Required]
 	[MaxLength(256, ErrorMessage = "Image file must have less than 256 characters.")]
+	[RegularExpression(
+		"^(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png)$",
+		ErrorMessage = "Please enter a valid image link.")]
 	public string ImageUrl { get; set; }
 
 	/// <summary>
@@ -52,5 +55,8 @@ public sealed class Coffee
 	[Range(1, int.MaxValue)]
 	public int Quantity { get; set; }
 
+	/// <summary>
+	/// The coffee's roast.
+	/// </summary>
 	public Roast Roast { get; set; }
 }
