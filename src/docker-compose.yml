@@ -15,8 +15,17 @@ services:
         image: ${DOCKER_REGISTRY-}microcoffeesapi
         build:
             context: .
-            dockerfile: Services/MicroCoffees.Coffees/Dockerfile
+            dockerfile: Services/Coffees/MicroCoffees.Coffees/Dockerfile
         ports:
             - "5000:80"
         depends_on:
             - microcoffees.db
+
+    microcoffees.bikes:
+        container_name: BikesAPI
+        image: ${DOCKER_REGISTRY-}microcoffeesbikes
+        build:
+            context: .
+            dockerfile: Services/Bikes/MicroCoffees.Bikes/Dockerfile
+        ports:
+            - "5000:81"

@@ -16,7 +16,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroCoffees.Mobile", "Clie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroCoffees.Coffees", "Services\MicroCoffees.Coffees\MicroCoffees.Coffees.csproj", "{13E67F5E-CF6D-40FC-B9A7-03D4E12C9C82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroCoffees.Coffees.Tests", "Services\MicroCoffees.Coffees.Tests\MicroCoffees.Coffees.Tests.csproj", "{81C589FC-4C39-4FDD-A584-0588346736B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroCoffees.Coffees.Tests", "Services\MicroCoffees.Coffees.Tests\MicroCoffees.Coffees.Tests.csproj", "{81C589FC-4C39-4FDD-A584-0588346736B1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{5C66A4E5-298C-453D-B169-C8AB939D84CF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{CBE0665D-A855-49CC-9C19-9C5E395E5971}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Coffees", "Coffees", "{38BD108C-2885-46AF-A3D2-B649051AA3E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bikes", "Bikes", "{92277317-9873-43EC-B534-77B96996F0A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroCoffees.Bikes", "Services\Bikes\MicroCoffees.Bikes\MicroCoffees.Bikes.csproj", "{844EAECA-8343-43F5-A664-C00DD46CF1EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,9 +52,21 @@ Global
 		{81C589FC-4C39-4FDD-A584-0588346736B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81C589FC-4C39-4FDD-A584-0588346736B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81C589FC-4C39-4FDD-A584-0588346736B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{844EAECA-8343-43F5-A664-C00DD46CF1EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{844EAECA-8343-43F5-A664-C00DD46CF1EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{844EAECA-8343-43F5-A664-C00DD46CF1EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{844EAECA-8343-43F5-A664-C00DD46CF1EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1A58559C-769F-45B5-AB68-548576A72397} = {5C66A4E5-298C-453D-B169-C8AB939D84CF}
+		{13E67F5E-CF6D-40FC-B9A7-03D4E12C9C82} = {38BD108C-2885-46AF-A3D2-B649051AA3E5}
+		{81C589FC-4C39-4FDD-A584-0588346736B1} = {38BD108C-2885-46AF-A3D2-B649051AA3E5}
+		{38BD108C-2885-46AF-A3D2-B649051AA3E5} = {CBE0665D-A855-49CC-9C19-9C5E395E5971}
+		{92277317-9873-43EC-B534-77B96996F0A2} = {CBE0665D-A855-49CC-9C19-9C5E395E5971}
+		{844EAECA-8343-43F5-A664-C00DD46CF1EC} = {92277317-9873-43EC-B534-77B96996F0A2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D65C8B3D-94F3-4F99-9622-4E99F5F59B98}
